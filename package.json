@@ -1,0 +1,58 @@
+{
+  "name": "@pseger/markdown-fences",
+  "version": "0.0.1",
+  "description": "markdown-fences creates workflow activities which inject content into Markdown files with metadata tags.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest --coverage --verbose src",
+    "test:cover": "jest src --coverage",
+    "test:lint": "eslint src",
+    "test:updatesnapshot": "jest --updateSnapshot",
+    "build": "rollup --config",
+    "prebuild": "npm run clean",
+    "clean": "rimraf coverage dist",
+    "docs": "documentation build src -f html --github -o docs",
+    "precommit": "npm test:lint && npm test",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
+    "postversion": "git push && git push --tags && rm -rf build/temp"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=15"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "markdown",
+    "jsdoc",
+    "markdown",
+    "documentation",
+    "documentation generator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psenger/markdown-fences.git"
+  },
+  "author": "Philip A Senger <philip.a.senger@cngrgroup.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psenger/markdown-fences/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "homepage": "https://github.com/psenger/markdown-fences#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "eslint": "^7.32.0",
+    "jest": "^27.0.6",
+    "rollup": "^2.56.1",
+    "tmp": "^0.2.1"
+  },
+  "dependencies": {
+    "documentation": "^13.2.5",
+    "markdown-toc": "^1.2.0"
+  }
+}
