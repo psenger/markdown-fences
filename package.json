@@ -1,6 +1,6 @@
 {
   "name": "@psenger/markdown-fences",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "markdown-fences creates workflow activities which inject content into Markdown files with metadata tags.",
   "main": "dist/index.js",
   "scripts": {
