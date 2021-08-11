@@ -12,6 +12,7 @@ Features include:
    the position
 5. injectToc - Scans a markdown and injects a Table of contents.
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 ## Table of contents
 - [markdown-fences](#markdown-fences)
@@ -282,6 +283,10 @@ markdown-fences fruitful.
 * Please consider adding an example under examples/ that demonstrates any new functionality
 
 ## Deployment Steps
+
+These are notes for deploying to NPM. I used `npmrc` to manage my NPM identities
+(`npm i npmrc -g` to install ). Then I created a new profile called `public` with
+(`npmrc -c public`) and then switch to it with `npmrc public`.
 
 * create a pull request from `dev` to `main`
 * check out `main`
