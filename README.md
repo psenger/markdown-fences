@@ -43,18 +43,16 @@ Features include:
   * [Deployment Steps](#deployment-steps)
   * [License](#license)
 
-## Install
-
-This project, hosted alternatively in GitHub, not NPM, requires you append the following to a project level file `./.npmrc`
-
-```
-@psenger:registry=https://npm.pkg.github.com
-```
-
-Once completed, you can then execute either `npm` or `yarn` to install.
+## Installation Instructions
 
 ```bash
-npm install @pseger/markdown-fences --save
+npm install @psenger/markdown-fences --save
+```
+
+or
+
+```bash
+yarn add @psenger/markdown-fences
 ```
 
 ## Usage
@@ -288,7 +286,7 @@ markdown-fences fruitful.
 * create a pull request from `dev` to `main`
 * check out `main`
 * `npm version patch -m "message here" or minor`
-* `npm publish`
+* `npm publish --access public`
 * Then switch to `dev` branch
 * And then merge `main` into `dev` and push `dev` to origin
 
