@@ -11,37 +11,42 @@ Features include:
 4. injectFileFencePosts - scans ( one pass ) a Markdown file and injects another content into
    the position
 5. injectToc - Scans a markdown and injects a Table of contents.
+6. injectCodeFencePosts - scans ( one pass ) a Markdown file and injects another content into
+   the position surrounded with GitHub Language highlighting.
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
-## Table of contents
-- [markdown-fences](#markdown-fences)
-  * [Install](#install)
-  * [Usage](#usage)
-    + [readContents](#readcontents)
-    + [writeContents](#writecontents)
-    + [injectJsDoc](#injectjsdoc)
-    + [injectFileFencePosts](#injectfilefenceposts)
-    + [injectToc](#injecttoc)
-  * [API](#api)
-    + [readContents](#readcontents-1)
-      - [Parameters](#parameters)
-    + [writeContents](#writecontents-1)
-      - [Parameters](#parameters-1)
-    + [injectJsDoc](#injectjsdoc-1)
-      - [Parameters](#parameters-2)
-      - [Examples](#examples)
-    + [injectFileFencePosts](#injectfilefenceposts-1)
-      - [Parameters](#parameters-3)
-      - [Examples](#examples-1)
-    + [injectToc](#injecttoc-1)
-      - [Parameters](#parameters-4)
-      - [Examples](#examples-2)
-    + [generateMarkDownFile](#generatemarkdownfile)
-      - [Parameters](#parameters-5)
-  * [Contributing](#contributing)
-    + [Rules](#rules)
-  * [Deployment Steps](#deployment-steps)
-  * [License](#license)
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Installation Instructions](#installation-instructions)
+- [API](#api)
+  * [readContents](#readcontents)
+    + [Parameters](#parameters)
+  * [writeContents](#writecontents)
+    + [Parameters](#parameters-1)
+  * [injectJsDoc](#injectjsdoc)
+    + [Parameters](#parameters-2)
+    + [Examples](#examples)
+  * [injectFileFencePosts](#injectfilefenceposts)
+    + [Parameters](#parameters-3)
+    + [Examples](#examples-1)
+  * [injectCodeFencePosts](#injectcodefenceposts)
+    + [Parameters](#parameters-4)
+    + [Examples](#examples-2)
+  * [injectToc](#injecttoc)
+    + [Parameters](#parameters-5)
+    + [Examples](#examples-3)
+  * [generateMarkDownFile](#generatemarkdownfile)
+    + [Parameters](#parameters-6)
+- [Contributing](#contributing)
+  * [Rules](#rules)
+- [Deployment Steps](#deployment-steps)
+- [License](#license)
+- [This product uses the following Open Source libraries and is subject to their License](#this-product-uses-the-following-open-source-libraries-and-is-subject-to-their-license)
+- [Acknowledgments](#acknowledgments)
+  * [Dependencies](#dependencies)
+  * [Development Dependencies](#development-dependencies)
 
 ## Installation Instructions
 
@@ -55,105 +60,6 @@ or
 yarn add @psenger/markdown-fences
 ```
 
-## Usage
-
-`markdown-fences` is a set of utility functions designed to augment Markdown creation. It is
-made up of the following functions.
-
-### readContents
-
-```javascript
-const path = require('path');
-const readme = path.join( __dirname, '.README.md' );
-try {
-  const readMeContent = await readContents(readMe);
-} catch (e) {
-  console.error(e);
-}
-```
-
-### writeContents
-
-```javascript
-const path = require('path');
-const readme = path.join( __dirname, 'README.md' );
-try {
-  const str = `# hello
- welcome to my file
- `;
-  await writeContents( readme, str)
-} catch (e) {
-  console.error(e);
-}
-```
-
-### injectJsDoc
-
-Assuming you have these tags in your markdown file called `.README.md` it will replace it with
-JavaScript Doc. In this example, the javascript is located in `__dirname`, `src`, `index.js`
-
-```text
-<!--START_SECTION:jsdoc-->
-<!--END_SECTION:jsdoc-->
-```
-
-```javascript
-const path = require('path');
-const readme = path.join( __dirname, '.README.md' );
-try {
-  const readMeContent = await readContents(readMe);
-  let results =  await injectJsDoc(readMe, [ join(__dirname,'src','index.js') ])
-  console.log( results );
-} catch (e) {
-  console.error(e);
-}
-```
-
-### injectFileFencePosts
-
-Reads a Markdown file, finds file injection locations, and injects each file in-line. In this
-example, it is assumed there is a file called `sample.md` in the `__dirname` directory, and will
-inject the contents in place.
-
-```text
-<!--START_SECTION:file:sample.md-->
-<!--END_SECTION:file:sample.md-->
-```
-
-```javascript
-const path = require('path');
-const readme = path.join( __dirname, '.README.md' );
-try {
-  const readMeContent = await readContents(readMe);
-  const results = await injectFileFencePosts(readMe, path.join(__dirname), {log:true})
-  console.log( results );
-} catch (e) {
-  console.error(e);
-}
-```
-
-### injectToc
-
-Will read the Heading tags EG `# Start`, `## Level 2-A`, and `## Level 2-B` and then replace the
-tags `<!--START_SECTION:toc--><!--END_SECTION:toc-->` with a Table of contents.
-
-```text
-<!--START_SECTION:toc-->
-<!--END_SECTION:toc-->
-```
-
-```javascript
-const readMe = "# Start\n"
-"<!--START_SECTION:toc-->\n"
-"<!--END_SECTION:toc-->\n"
-"## Level 2-A\n"
-"## Level 2-B \n" ;
-
-let results =  await injectToc(readMe)
-console.log( results );
-```
-
-<!--START_SECTION:jsdoc-->
 ## API
 
 <!-- Generated by documentation.js. Update this documentation by updating the source code. -->
@@ -191,10 +97,11 @@ Insert JavaScript Documentation into these fences.
 
 #### Examples
 
-```javascript
 File must have these meta Tags to insert the `tutorial.md` file.
-  <!--START_SECTION:jsdoc-->
-  <!--END_SECTION:jsdoc-->
+
+```javascript
+<!--START_SECTION:jsdoc-->
+<!--END_SECTION:jsdoc-->
 ```
 
 Returns **[Promise][2]<[String][1]>** The processed content.
@@ -209,14 +116,44 @@ Inject a file into the meta tag location.
 *   `baseDir` **[String][1]** The base directory for all the fenced files.
 *   `options` **[Object][3]** An option (optional, default `{log:false,baseDir:null}`)
 
-  *   `options.log` **[Boolean][5]** Log flag (optional, default `false`)
+    *   `options.log` **[Boolean][5]** Log flag (optional, default `false`)
 
 #### Examples
 
-```javascript
 File must have these meta Tags to insert the `tutorial.md` file.
-  <!--START_SECTION:tutorial.md-->
-  <!--END_SECTION:tutorial.md-->
+
+```javascript
+<!--START_SECTION:tutorial.md-->
+<!--END_SECTION:tutorial.md-->
+```
+
+Returns **[Promise][2]<[String][1]>** The processed content.
+
+### injectCodeFencePosts
+
+Inject a file into the code fence section location with optional language highlighting.
+
+#### Parameters
+
+*   `markdownContent` **[String][1]** The whole markdown content of a file, that has the Code Fence in it.
+*   `baseDir` **[String][1]** The base directory for all the fenced files.
+*   `options` **[Object][3]** An option (optional, default `{log:false}`)
+
+    *   `options.log` **[Boolean][5]** Log flag (optional, default `false`)
+
+#### Examples
+
+File must have these meta Tags to insert the file with optional language:
+
+```javascript
+<!--START_CODE_FENCE_SECTION:javascript:file:example.js-->
+<!--END_CODE_FENCE_SECTION:javascript:file:example.js-->
+```
+Or without language:
+
+```javascript
+<!--START_CODE_FENCE_SECTION:file:example.txt-->
+<!--END_CODE_FENCE_SECTION:file:example.txt-->
 ```
 
 Returns **[Promise][2]<[String][1]>** The processed content.
@@ -231,10 +168,11 @@ Inject a Table of Contents
 
 #### Examples
 
-```javascript
 File must have these meta Tags to locate the TOC.
-  <!--START_SECTION:toc-->
-  <!--END_SECTION:toc-->
+
+```javascript
+<!--START_SECTION:toc-->
+<!--END_SECTION:toc-->
 ```
 
 Returns **[Promise][2]<[String][1]>** The processed content.
@@ -263,8 +201,6 @@ Returns **[Promise][2]\<void>**
 
 [5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-<!--END_SECTION:jsdoc-->
-
 ## Contributing
 
 Thanks for contributing! 😁 Here are some rules that will make your change to
@@ -282,6 +218,14 @@ markdown-fences fruitful.
 * Please consider adding an example under examples/ that demonstrates any new functionality
 
 ## Deployment Steps
+
+**NOTE** I tried to make a `.REDME.md` and build it with tags but there are so many tags within
+the code it doesn't work very well. I think going forward I think we should make `README.md` to
+make individual parts.
+
+These are notes for deploying to NPM. I used `npmrc` to manage my NPM identities
+(`npm i npmrc -g` to install ). Then I created a new profile called `public` with
+(`npmrc -c public`) and then switch to it with `npmrc public`.
 
 * create a pull request from `dev` to `main`
 * check out `main`
@@ -314,11 +258,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
-**This product uses the following Open Source libraries and is subject to their License**
-
+This product uses the following Open Source libraries and is subject to their License
+------
 
 * [documentation.js - ICS](https://github.com/documentationjs/documentation/blob/master/LICENSE)
 * [markdown-toc - MIT](https://github.com/jonschlinkert/markdown-toc/blob/master/LICENSE)
 
-MIT © [psenger](https://github.com/psenger)
+## Acknowledgments
+
+This project directly uses the following open-source packages:
+
+### Dependencies
+
+- [documentation](https://github.com/documentationjs/documentation) - ISC License,
+- [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - MIT License
+
+### Development Dependencies
+
+- [auto-changelog](https://github.com/CookPete/auto-changelog) - MIT License,
+- [codecov](https://github.com/codecov/codecov-node) - MIT License,
+- [eslint](https://github.com/eslint/eslint) - MIT License,
+- [jest](https://github.com/jestjs/jest) - MIT License,
+- [license-checker](https://github.com/davglass/license-checker) - BSD-3-Clause License,
+- [rimraf](https://github.com/isaacs/rimraf) - ISC License,
+- [rollup](https://github.com/rollup/rollup) - MIT License,
+- [standard](https://github.com/standard/standard) - MIT License,
+- [tmp](https://github.com/raszi/node-tmp) - MIT License
+

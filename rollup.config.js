@@ -1,14 +1,13 @@
-
-import pkg from './package.json'
+const pkg = require('./package.json')
 
 module.exports = {
-    input: './src/index.js',
-    output: [
-        {
-            file: pkg.main,
-            format: 'cjs',
-            sourcemap: true
-        }
-    ],
-    plugins: []
+  input: './src/index.js',
+  output: [
+    {
+      file: pkg.main,
+      format: 'cjs',
+      sourcemap: true
+    }
+  ],
+  plugins: []
 }
