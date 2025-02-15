@@ -38,19 +38,19 @@ const writeContents = async (file, content, options = { encoding: 'utf-8' }) => 
  *   <!--START_SECTION:jsdoc-->
  *   <!--END_SECTION:jsdoc-->
  */
-const injectJsDoc = async ( markdownContent, indexes ) => {
+const injectJsDoc = async (markdownContent, indexes) => {
   const START_COMMENT_FENCE = '<!--START_SECTION:jsdoc-->';
   const END_COMMENT_FENCE = '<!--END_SECTION:jsdoc-->';
   const listRegExp = new RegExp(
     `${START_COMMENT_FENCE}[\\s\\S]+${END_COMMENT_FENCE}`
   );
   const meta = await documentation.build(
-    indexes, //[path.join(__dirname, 'src', 'index.js')],
+    indexes, // [path.join(__dirname, 'src', 'index.js')],
     {}
   );
-  let docs = await documentation.formats.md(meta,{ markdownToc: false });
+  let docs = await documentation.formats.md(meta, { markdownToc: false });
   docs = docs.replace(/^(#.)/gm, '#$1');
-  return markdownContent.replace(listRegExp, START_COMMENT_FENCE + '\n' + '## API\n\n' + docs + '\n' + END_COMMENT_FENCE )
+  return markdownContent.replace(listRegExp, START_COMMENT_FENCE + '\n' + '## API\n\n' + docs + '\n' + END_COMMENT_FENCE)
 };
 
 /**
@@ -66,41 +66,41 @@ const injectJsDoc = async ( markdownContent, indexes ) => {
  *   <!--START_SECTION:tutorial.md-->
  *   <!--END_SECTION:tutorial.md-->
  */
-const injectFileFencePosts = async ( markdownContent, baseDir, options = { log : false } ) => {
+const injectFileFencePosts = async (markdownContent, baseDir, options = { log: false }) => {
   options.log = options.log || false;
-  const logFileName = ( {log} ) => function logFileName ( fileName ) {
-    if ( log ) console.log( 'File name = ', fileName );
+  const logFileName = ({ log }) => function logFileName (fileName) {
+    if (log) console.log('File name = ', fileName);
     return fileName
   };
   const START_LOAD_FILE_FENCE = (file = '(.*)') => `<!--START_SECTION:file:${file}-->`;
   const END_LOAD_FILE_FENCE = (file = '(.*)') => `<!--END_SECTION:file:${file}-->`;
-  const loadFileRegExp = new RegExp(START_LOAD_FILE_FENCE(),'g');
-  const fileFencePostsRegExp = ( file ) => {
-    return new RegExp(`${ START_LOAD_FILE_FENCE( file ) }[\\s\\S]+${ END_LOAD_FILE_FENCE( file ) }`)
+  const loadFileRegExp = new RegExp(START_LOAD_FILE_FENCE(), 'g');
+  const fileFencePostsRegExp = (file) => {
+    return new RegExp(`${START_LOAD_FILE_FENCE(file)}[\\s\\S]+${END_LOAD_FILE_FENCE(file)}`)
   };
-  const pathBuilder = (file) => path.join( baseDir, file );
+  const pathBuilder = (file) => path.join(baseDir, file);
   // const readMeContent = await readContents( markdownContent )
   // const files = [...readMeContent.matchAll( loadFileRegExp ) ].reduce( ( acc, [,file ] ) => { acc.push( file ); return acc }, [] ).map( logFileName(options) );
-  const files = [...markdownContent.matchAll( loadFileRegExp ) ].reduce( ( acc, [,file ] ) => { acc.push( file ); return acc }, [] ).map( logFileName(options) );
-  const contentMap = await Promise.all( files.map( async ( file ) => {
+  const files = [...markdownContent.matchAll(loadFileRegExp)].reduce((acc, [, file]) => { acc.push(file); return acc }, []).map(logFileName(options));
+  const contentMap = await Promise.all(files.map(async (file) => {
     const fileName = pathBuilder(file);
     let content = '';
     try {
       content = await readContents(fileName);
     } catch (e) {
-      if ( e.message ) {
+      if (e.message) {
         console.error(e.message);
       } else {
         console.error(e);
       }
     }
-    return { file, content };
-  } ) );
+    return { file, content }
+  }));
   const printContent = (content) => content !== '' ? `\n${content}\n` : '\n';
   return contentMap.reduce(
-    ( acc, { file, content } ) => acc.replace( fileFencePostsRegExp( file ), START_LOAD_FILE_FENCE(file) + printContent(content) + END_LOAD_FILE_FENCE(file) ),
+    (acc, { file, content }) => acc.replace(fileFencePostsRegExp(file), START_LOAD_FILE_FENCE(file) + printContent(content) + END_LOAD_FILE_FENCE(file)),
     markdownContent
-  );
+  )
 };
 
 /**
@@ -113,14 +113,14 @@ const injectFileFencePosts = async ( markdownContent, baseDir, options = { log :
  *   <!--START_SECTION:toc-->
  *   <!--END_SECTION:toc-->
  */
-const injectToc = async ( markdownContent ) => {
-  const { content } = toc( markdownContent, {} );
+const injectToc = async (markdownContent) => {
+  const { content } = toc(markdownContent, {});
   const START_COMMENT_FENCE = '<!--START_SECTION:toc-->';
   const END_COMMENT_FENCE = '<!--END_SECTION:toc-->';
   const listRegExp = new RegExp(
     `${START_COMMENT_FENCE}[\\s\\S]+${END_COMMENT_FENCE}`
   );
-  return markdownContent.replace(listRegExp, START_COMMENT_FENCE + '\n\n## Table of contents\n' + content + '\n\n' + END_COMMENT_FENCE );
+  return markdownContent.replace(listRegExp, START_COMMENT_FENCE + '\n\n## Table of contents\n' + content + '\n\n' + END_COMMENT_FENCE)
 };
 
 const compose = (...fns) => args => fns.reduce((p, f) => p.then(f), Promise.resolve(args));
@@ -138,7 +138,7 @@ const compose = (...fns) => args => fns.reduce((p, f) => p.then(f), Promise.reso
 const generateMarkDownFile = async (markdownFile, newMarkdownFile, baseDir, indexes, options) => {
   const closureInjectFileFencePosts = (baseDir, options) => async (markdownContent) => injectFileFencePosts(markdownContent, baseDir, options);
   const closureInjectJsDoc = (indexes) => async (markdownContent) => injectJsDoc(markdownContent, indexes);
-  const closureWriteContents = (outFile) => async (markdownContent) => writeContents(outFile,markdownContent);
+  const closureWriteContents = (outFile) => async (markdownContent) => writeContents(outFile, markdownContent);
   return await compose(
     readContents,
     closureInjectJsDoc(indexes),
@@ -154,6 +154,6 @@ module.exports = {
   injectJsDoc,
   injectFileFencePosts,
   injectToc,
-  generateMarkDownFile,
+  generateMarkDownFile
 };
 //# sourceMappingURL=index.js.map

@@ -15,34 +15,36 @@ Features include:
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 ## Table of contents
-- [markdown-fences](#markdown-fences)
-  * [Install](#install)
-  * [Usage](#usage)
-    + [readContents](#readcontents)
-    + [writeContents](#writecontents)
-    + [injectJsDoc](#injectjsdoc)
-    + [injectFileFencePosts](#injectfilefenceposts)
-    + [injectToc](#injecttoc)
-  * [API](#api)
-    + [readContents](#readcontents-1)
-      - [Parameters](#parameters)
-    + [writeContents](#writecontents-1)
-      - [Parameters](#parameters-1)
-    + [injectJsDoc](#injectjsdoc-1)
-      - [Parameters](#parameters-2)
-      - [Examples](#examples)
-    + [injectFileFencePosts](#injectfilefenceposts-1)
-      - [Parameters](#parameters-3)
-      - [Examples](#examples-1)
-    + [injectToc](#injecttoc-1)
-      - [Parameters](#parameters-4)
-      - [Examples](#examples-2)
-    + [generateMarkDownFile](#generatemarkdownfile)
-      - [Parameters](#parameters-5)
-  * [Contributing](#contributing)
-    + [Rules](#rules)
-  * [Deployment Steps](#deployment-steps)
-  * [License](#license)
+- [Installation Instructions](#installation-instructions)
+- [Usage](#usage)
+  * [readContents](#readcontents)
+  * [writeContents](#writecontents)
+  * [injectJsDoc](#injectjsdoc)
+  * [injectFileFencePosts](#injectfilefenceposts)
+  * [injectToc](#injecttoc)
+- [API](#api)
+  * [readContents](#readcontents-1)
+    + [Parameters](#parameters)
+  * [writeContents](#writecontents-1)
+    + [Parameters](#parameters-1)
+  * [injectJsDoc](#injectjsdoc-1)
+    + [Parameters](#parameters-2)
+    + [Examples](#examples)
+  * [injectFileFencePosts](#injectfilefenceposts-1)
+    + [Parameters](#parameters-3)
+    + [Examples](#examples-1)
+  * [injectToc](#injecttoc-1)
+    + [Parameters](#parameters-4)
+    + [Examples](#examples-2)
+  * [generateMarkDownFile](#generatemarkdownfile)
+    + [Parameters](#parameters-5)
+- [Contributing](#contributing)
+  * [Rules](#rules)
+- [Deployment Steps](#deployment-steps)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+  * [Dependencies](#dependencies)
+  * [Development Dependencies](#development-dependencies)
 
 ## Installation Instructions
 
@@ -320,10 +322,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-**This product uses the following Open Source libraries and is subject to their License**
+## Acknowledgments
 
+This project directly uses the following open-source packages:
 
-* [documentation.js - ICS](https://github.com/documentationjs/documentation/blob/master/LICENSE)
-* [markdown-toc - MIT](https://github.com/jonschlinkert/markdown-toc/blob/master/LICENSE)
+### Dependencies
+
+- [documentation](https://github.com/documentationjs/documentation) - ISC License,
+- [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - MIT License
+
+### Development Dependencies
+
+- [codecov](https://github.com/codecov/codecov-node) - MIT License,
+- [eslint](https://github.com/eslint/eslint) - MIT License,
+- [jest](https://github.com/jestjs/jest) - MIT License,
+- [license-checker](https://github.com/davglass/license-checker) - BSD-3-Clause License,
+- [rimraf](https://github.com/isaacs/rimraf) - ISC License,
+- [rollup](https://github.com/rollup/rollup) - MIT License,
+- [tmp](https://github.com/raszi/node-tmp) - MIT License
 
 MIT © [psenger](https://github.com/psenger)
