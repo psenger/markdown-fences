@@ -321,7 +321,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
 ## Acknowledgments
 
 This project directly uses the following open-source packages:
@@ -333,6 +332,7 @@ This project directly uses the following open-source packages:
 
 ### Development Dependencies
 
+- [auto-changelog](https://github.com/CookPete/auto-changelog) - MIT License,
 - [codecov](https://github.com/codecov/codecov-node) - MIT License,
 - [eslint](https://github.com/eslint/eslint) - MIT License,
 - [jest](https://github.com/jestjs/jest) - MIT License,
