@@ -1,13 +1,13 @@
 {
   "name": "@psenger/markdown-fences",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "markdown-fences creates workflow activities which inject content into Markdown files with metadata tags.",
   "main": "dist/index.js",
   "scripts": {
     "ci": "npm install --verbose && jest --ci --coverage && codecov",
     "test": "jest --config jest.config.cjs --verbose src",
     "test:cover": "jest --config jest.config.cjs --coverage --verbose src",
-    "test:lint": "eslint src",
+    "test:lint": "standard --env jest \"src/*.js\"",
     "test:updatesnapshot": "jest --updateSnapshot",
     "build": "rollup --config",
     "prebuild": "npm run clean",
