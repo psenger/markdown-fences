@@ -17,5 +17,6 @@ This project directly uses the following open-source packages:
 - [license-checker](https://github.com/davglass/license-checker) - BSD-3-Clause License,
 - [rimraf](https://github.com/isaacs/rimraf) - ISC License,
 - [rollup](https://github.com/rollup/rollup) - MIT License,
+- [standard](https://github.com/standard/standard) - MIT License,
 - [tmp](https://github.com/raszi/node-tmp) - MIT License
 

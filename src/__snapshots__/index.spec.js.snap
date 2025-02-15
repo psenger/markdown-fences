@@ -1,5 +1,111 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`@pseger/markdown-fences #injectCodeFencePosts Testing failed directory with language called out 1`] = `
+"# Start
+
+<!--START_CODE_FENCE_SECTION:javascript:file:/foo.js-->
+<!--END_CODE_FENCE_SECTION:javascript:file:/foo.js-->
+
+## End
+"
+`;
+
+exports[`@pseger/markdown-fences #injectCodeFencePosts Testing failed directory without language called out 1`] = `
+"# Start
+
+<!--START_CODE_FENCE_SECTION:file:/foo.js-->
+<!--END_CODE_FENCE_SECTION:file:/foo.js-->
+
+## End
+"
+`;
+
+exports[`@pseger/markdown-fences #injectCodeFencePosts Testing full directory with language called out 1`] = `
+"# Start
+
+<!--START_CODE_FENCE_SECTION:javascript:file:/foo.js-->
+\`\`\`javascript
+/**
+ * @typedef boom
+ * @property {String} namnam - nom nom
+ * @property {String[]} keys - the keys
+ */
+
+/**
+ * Foo test
+ * @type {{boo: exports.boo, foo: exports.foo}}
+ */
+module.exports = {
+  /**
+   * foo test
+   * @param {String} st - something
+   * @param {boolean} end - more of something
+   * @return {Promise<boolean>}
+   */
+  foo: async function (st, end) {
+    return Promise.resolve(true)
+  },
+  /**
+   * boo test
+   * @param {String} [st] - something
+   * @param {boolean} [end=false] - more something
+   * @return {boom}
+   */
+  boo: function (st, end) {
+    return { namnam: 'xxx', keys: ['a'] }
+  }
+}
+
+\`\`\`
+<!--END_CODE_FENCE_SECTION:javascript:file:/foo.js-->
+
+## End
+"
+`;
+
+exports[`@pseger/markdown-fences #injectCodeFencePosts Testing full directory without language called out 1`] = `
+"# Start
+
+<!--START_CODE_FENCE_SECTION:file:/foo.js-->
+\`\`\`
+/**
+ * @typedef boom
+ * @property {String} namnam - nom nom
+ * @property {String[]} keys - the keys
+ */
+
+/**
+ * Foo test
+ * @type {{boo: exports.boo, foo: exports.foo}}
+ */
+module.exports = {
+  /**
+   * foo test
+   * @param {String} st - something
+   * @param {boolean} end - more of something
+   * @return {Promise<boolean>}
+   */
+  foo: async function (st, end) {
+    return Promise.resolve(true)
+  },
+  /**
+   * boo test
+   * @param {String} [st] - something
+   * @param {boolean} [end=false] - more something
+   * @return {boom}
+   */
+  boo: function (st, end) {
+    return { namnam: 'xxx', keys: ['a'] }
+  }
+}
+
+\`\`\`
+<!--END_CODE_FENCE_SECTION:file:/foo.js-->
+
+## End
+"
+`;
+
 exports[`@pseger/markdown-fences #injectFileFencePosts Testing failed directory 1`] = `
 "# Start
 

@@ -81,7 +81,12 @@ const injectFileFencePosts = async (markdownContent, baseDir, options = { log: f
   const pathBuilder = (file) => path.join(baseDir, file);
   // const readMeContent = await readContents( markdownContent )
   // const files = [...readMeContent.matchAll( loadFileRegExp ) ].reduce( ( acc, [,file ] ) => { acc.push( file ); return acc }, [] ).map( logFileName(options) );
-  const files = [...markdownContent.matchAll(loadFileRegExp)].reduce((acc, [, file]) => { acc.push(file); return acc }, []).map(logFileName(options));
+  const files = [...markdownContent.matchAll(loadFileRegExp)]
+    .reduce((acc, [, file]) => {
+      acc.push(file);
+      return acc
+    }, [])
+    .map(logFileName(options));
   const contentMap = await Promise.all(files.map(async (file) => {
     const fileName = pathBuilder(file);
     let content = '';
@@ -98,7 +103,89 @@ const injectFileFencePosts = async (markdownContent, baseDir, options = { log: f
   }));
   const printContent = (content) => content !== '' ? `\n${content}\n` : '\n';
   return contentMap.reduce(
-    (acc, { file, content }) => acc.replace(fileFencePostsRegExp(file), START_LOAD_FILE_FENCE(file) + printContent(content) + END_LOAD_FILE_FENCE(file)),
+    (acc, { file, content }) =>
+      acc.replace(
+        fileFencePostsRegExp(file),
+        START_LOAD_FILE_FENCE(file) +
+        printContent(content) +
+        END_LOAD_FILE_FENCE(file)
+      ),
+    markdownContent
+  )
+};
+
+/**
+ * Inject a file into the code fence section location with optional language highlighting.
+ *
+ * @param {String} markdownContent - The whole markdown content of a file, that has the Code Fence in it.
+ * @param {String} baseDir - The base directory for all the fenced files.
+ * @param {Object} [options={log:false}] - An option
+ * @param {Boolean} [options.log=false] - Log flag
+ * @return {Promise<String>} - The processed content.
+ * @example
+ * File must have these meta Tags to insert the file with optional language:
+ *   <!--START_CODE_FENCE_SECTION:javascript:file:example.js-->
+ *   <!--END_CODE_FENCE_SECTION:javascript:file:example.js-->
+ *
+ *   Or without language:
+ *   <!--START_CODE_FENCE_SECTION:file:example.txt-->
+ *   <!--END_CODE_FENCE_SECTION:file:example.txt-->
+ */
+const injectCodeFencePosts = async (markdownContent, baseDir, options = { log: false }) => {
+  options.log = options.log || false;
+
+  const logFileName = ({ log }) => function logFileName (fileName) {
+    if (log) console.log('File name = ', fileName);
+    return fileName
+  };
+
+  const START_CODE_FENCE_SECTION = (lang = '', file = '(.*)') => lang ? `<!--START_CODE_FENCE_SECTION:${lang}:file:${file}-->` : `<!--START_CODE_FENCE_SECTION:file:${file}-->`;
+
+  const END_CODE_FENCE_SECTION = (lang = '', file = '(.*)') => lang ? `<!--END_CODE_FENCE_SECTION:${lang}:file:${file}-->` : `<!--END_CODE_FENCE_SECTION:file:${file}-->`;
+
+  const loadFileRegExp = /<!--START_CODE_FENCE_SECTION:(?:([^:]+):)?file:([^>]+?)-->/g;
+
+  const codeFencePostsRegExp = (lang, file) => {
+    const pattern = lang
+      ? `<!--START_CODE_FENCE_SECTION:${lang}:file:${file}-->[\\s\\S]+<!--END_CODE_FENCE_SECTION:${lang}:file:${file}-->`
+      : `<!--START_CODE_FENCE_SECTION:file:${file}-->[\\s\\S]+<!--END_CODE_FENCE_SECTION:file:${file}-->`;
+    return new RegExp(pattern)
+  };
+
+  const pathBuilder = (file) => path.join(baseDir, file);
+
+  const files = [...markdownContent.matchAll(loadFileRegExp)]
+    .reduce((acc, [, lang, file]) => {
+      acc.push({ lang: lang || '', file });
+      return acc
+    }, [])
+    .map(logFileName(options));
+
+  const contentMap = await Promise.all(files.map(async ({ lang, file }) => {
+    const fileName = pathBuilder(file);
+    let content = '';
+    try {
+      content = await readContents(fileName);
+    } catch (e) {
+      if (e.message) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
+    }
+    return { lang, file, content }
+  }));
+
+  const printContent = ({ lang, content }) => content !== '' ? `\n\`\`\`${lang || ''}\n${content}\n\`\`\`\n` : '\n';
+
+  return contentMap.reduce(
+    (acc, { lang, file, content }) =>
+      acc.replace(
+        codeFencePostsRegExp(lang, file),
+        START_CODE_FENCE_SECTION(lang, file) +
+        printContent({ lang, content }) +
+        END_CODE_FENCE_SECTION(lang, file)
+      ),
     markdownContent
   )
 };
@@ -137,22 +224,24 @@ const compose = (...fns) => args => fns.reduce((p, f) => p.then(f), Promise.reso
  */
 const generateMarkDownFile = async (markdownFile, newMarkdownFile, baseDir, indexes, options) => {
   const closureInjectFileFencePosts = (baseDir, options) => async (markdownContent) => injectFileFencePosts(markdownContent, baseDir, options);
+  const closureInjectCodeFencePosts = (baseDir, options) => async (markdownContent) => injectCodeFencePosts(markdownContent, baseDir, options);
   const closureInjectJsDoc = (indexes) => async (markdownContent) => injectJsDoc(markdownContent, indexes);
   const closureWriteContents = (outFile) => async (markdownContent) => writeContents(outFile, markdownContent);
   return await compose(
     readContents,
     closureInjectJsDoc(indexes),
     closureInjectFileFencePosts(baseDir, options),
+    closureInjectCodeFencePosts(baseDir, options),
     injectToc,
     closureWriteContents(newMarkdownFile)
   )(markdownFile)
 };
-
 module.exports = {
   readContents,
   writeContents,
   injectJsDoc,
   injectFileFencePosts,
+  injectCodeFencePosts,
   injectToc,
   generateMarkDownFile
 };
