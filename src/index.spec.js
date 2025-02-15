@@ -42,7 +42,7 @@ describe('@pseger/markdown-fences', () => {
       expect.assertions(1)
       return expect(() => writeContents(null, null)).rejects.toThrow()
     })
-    it('should just work reading and writting', async () => {
+    it('should just work reading and writing', async () => {
       expect.assertions(1)
       const tmpobj = tmp.fileSync()
       const file = tmpobj.name
