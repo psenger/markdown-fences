@@ -48,6 +48,7 @@
     "codecov": "^3.8.3",
     "eslint": "^9.20.1",
     "jest": "^29.7.0",
+    "license-checker": "^25.0.1",
     "rimraf": "^5.0.10",
     "rollup": "^3.29.5",
     "tmp": "^0.2.3"
