@@ -6,6 +6,7 @@ const {
   writeContents,
   injectJsDoc,
   injectFileFencePosts,
+  injectCodeFencePosts,
   injectToc,
   generateMarkDownFile
 } = require('./index')
@@ -167,6 +168,66 @@ describe('@pseger/markdown-fences', () => {
 `
       const tmpobj = tmp.dirSync()
       const results = await injectFileFencePosts(buildDynamicReadMe('sample.md'), tmpobj.name, { log: true })
+      expect(results).toMatchSnapshot()
+      tmpobj.removeCallback()
+    })
+  })
+  describe('#injectCodeFencePosts', () => {
+    it('Testing full directory with language called out', async () => {
+      const buildDynamicReadMe = (file) => `# Start
+
+<!--START_CODE_FENCE_SECTION:javascript:file:${file}-->
+<!--END_CODE_FENCE_SECTION:javascript:file:${file}-->
+
+## End
+`
+      const tmpobj = tmp.dirSync()
+      const tempDirectoryAndFileLocation = join(tmpobj.name, 'foo.js')
+      cp(join(__dirname, '__test_harness__', 'foo.js'), tempDirectoryAndFileLocation)
+      const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: false })
+      expect(results).toMatchSnapshot()
+      rm(tempDirectoryAndFileLocation)
+      tmpobj.removeCallback()
+    })
+    it('Testing failed directory with language called out', async () => {
+      const buildDynamicReadMe = (file) => `# Start
+
+<!--START_CODE_FENCE_SECTION:javascript:file:${file}-->
+<!--END_CODE_FENCE_SECTION:javascript:file:${file}-->
+
+## End
+`
+      const tmpobj = tmp.dirSync()
+      const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: true })
+      expect(results).toMatchSnapshot()
+      tmpobj.removeCallback()
+    })
+    it('Testing full directory without language called out', async () => {
+      const buildDynamicReadMe = (file) => `# Start
+
+<!--START_CODE_FENCE_SECTION:file:${file}-->
+<!--END_CODE_FENCE_SECTION:file:${file}-->
+
+## End
+`
+      const tmpobj = tmp.dirSync()
+      const tempDirectoryAndFileLocation = join(tmpobj.name, 'foo.js')
+      cp(join(__dirname, '__test_harness__', 'foo.js'), tempDirectoryAndFileLocation)
+      const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: false })
+      expect(results).toMatchSnapshot()
+      rm(tempDirectoryAndFileLocation)
+      tmpobj.removeCallback()
+    })
+    it('Testing failed directory without language called out', async () => {
+      const buildDynamicReadMe = (file) => `# Start
+
+<!--START_CODE_FENCE_SECTION:file:${file}-->
+<!--END_CODE_FENCE_SECTION:file:${file}-->
+
+## End
+`
+      const tmpobj = tmp.dirSync()
+      const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: true })
       expect(results).toMatchSnapshot()
       tmpobj.removeCallback()
     })

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
-const {join} = require('path')
+const { join } = require('path')
 const { devDependencies, dependencies } = require('../package.json')
 const checker = require('license-checker')
 
@@ -20,7 +20,7 @@ const thirdPartyNoticeFile = join(__dirname, '..', 'THIRD_PARTY_NOTICES.md')
  * @example
  * pbcopy(JSON.stringify(data, null, 4))
  */
-function pbcopy(data) {
+function pbcopy (data) {
   const proc = require('child_process').spawn('pbcopy', { env: { LC_CTYPE: 'UTF-8' } })
   proc.stdin.write(data)
   proc.stdin.end()
@@ -34,46 +34,46 @@ const prodModulesDirectlyUsed = new Set([
   ...Object.keys(dependencies)
 ])
 
-function findModules(dependenciesObj, devMod, prodMod) {
+function findModules (dependenciesObj, devMod, prodMod) {
   const dependencies = { }
   const developmentDependencies = { }
   Object.entries(dependenciesObj).forEach(([key, value]) => {
     const moduleName = key.split('@')[0]
-    if ( devMod.has(moduleName) ) {
+    if (devMod.has(moduleName)) {
       value.name = moduleName
       developmentDependencies[moduleName] = value
     }
   })
   Object.entries(dependenciesObj).forEach(([key, value]) => {
     const moduleName = key.split('@')[0]
-    if ( prodMod.has(moduleName) ) {
+    if (prodMod.has(moduleName)) {
       value.name = moduleName
       dependencies[moduleName] = value
     }
   })
   return {
     developmentDependencies: Object.values(developmentDependencies) || [],
-    dependencies: Object.values(dependencies) || [],
+    dependencies: Object.values(dependencies) || []
   }
 }
 checker.init({
-  start: join(__dirname, '..' ),
-}, function(err, packages) {
+  start: join(__dirname, '..')
+}, function (err, packages) {
   if (err) {
     console.error(err)
   } else {
     const results = findModules(
-                                                    packages,
-                                                    devModulesDirectlyUsed,
-                                                    prodModulesDirectlyUsed)
+      packages,
+      devModulesDirectlyUsed,
+      prodModulesDirectlyUsed)
 
-    pbcopy(template(2,results))
-    fs.writeFileSync(thirdPartyNoticeFile, template(1,results), {encoding: 'utf8'})
+    pbcopy(template(2, results))
+    fs.writeFileSync(thirdPartyNoticeFile, template(1, results), { encoding: 'utf8' })
   }
-});
-const itemTemplate = ({name,repository,licenses}) =>`
+})
+const itemTemplate = ({ name, repository, licenses }) => `
 - [${name}](${repository}) - ${licenses} License`
-const template = (depth,{dependencies,developmentDependencies}) =>`
+const template = (depth, { dependencies, developmentDependencies }) => `
 ${'#'.repeat(depth)} Acknowledgments
 
 This project directly uses the following open-source packages:
