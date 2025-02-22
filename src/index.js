@@ -1,9 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const fsp = fs.promises
-
 const toc = require('markdown-toc')
-const documentation = require('documentation')
+const jsdoc2md = require('jsdoc-to-markdown')
+
+/**
+ * @module @psenger/markdown-fences
+ */
 
 /**
  * Read the file contents of a Markdown file into a string
@@ -20,34 +23,47 @@ const readContents = async (file) => fsp.readFile(file, { encoding: 'utf8', flag
  * @param {String} content - the content to write to the file.
  * @param {Object} [options={encoding:'utf-8'}] - optional options passed to `fs#writeFile`
  * @return {Promise<void>}
- * @example
- *
  */
 const writeContents = async (file, content, options = { encoding: 'utf-8' }) => fsp.writeFile(file, content, options)
 
 /**
  * Insert JavaScript Documentation into these fences.
  *
+ * Warning: this code uses an old version of {@link https://github.com/jsdoc/jsdoc|jsdoc} throw
+ * several other APIS. And it will not support any
+ *
  * @param {String} markdownContent - The WHOLE read me file, or file that has the TOC Fence in it.
- * @param {String[]} indexes - the fully qualified source files.
+ * @param {String[]} files - Any array of fully qualified source files and may include ** globs
+ * @param [jsDocOptions] - Optional options passed to jsdoc-to-markdown render command see {@link https://github.com/jsdoc2md/jsdoc-to-markdown/blob/master/docs/API.md|jsdoc-to-markdown}
+ * @param [jsDocOptions.heading-depth] - The initial heading depth, default 2. For example, with a value of 2 the top-level markdown headings look like "## The heading".
+ * @param [jsDocOptions.module-index-format] - default `table`, options are: `none`, `grouped`, `table`, or `dl`
+ * @param [jsDocOptions.global-index-format] -  default `table`, options are: `none`, `grouped`, `table`, or `dl`
+ * @param [jsDocOptions.property-list-format] -  default `table`, options are: `list`, or `table`
+ * @param [jsDocOptions.member-index-format] -  default `grouped`, options are: `grouped`, or `list`
  * @return {Promise<String>} - The processed content.
  * @example
- * File must have these meta Tags to insert the `tutorial.md` file.
+ * File must have these meta Tags to insert the javascript docs in markdown format
  *   <!--START_SECTION:jsdoc-->
  *   <!--END_SECTION:jsdoc-->
  */
-const injectJsDoc = async (markdownContent, indexes) => {
+const injectJsDoc = async (markdownContent, files, jsDocOptions) => {
   const START_COMMENT_FENCE = '<!--START_SECTION:jsdoc-->'
   const END_COMMENT_FENCE = '<!--END_SECTION:jsdoc-->'
   const listRegExp = new RegExp(
     `${START_COMMENT_FENCE}[\\s\\S]+${END_COMMENT_FENCE}`
   )
-  const meta = await documentation.build(
-    indexes, // [path.join(__dirname, 'src', 'index.js')],
-    {}
-  )
-  let docs = await documentation.formats.md(meta, { markdownToc: false })
-  docs = docs.replace(/^(#.)/gm, '#$1')
+  const defaultConfig = {
+    'heading-depth': 2,
+    'module-index-format': 'table',
+    'global-index-format': 'table',
+    'property-list-format': 'table',
+    'member-index-format': 'grouped'
+  }
+  const docs = await jsdoc2md.render({
+    ...defaultConfig,
+    ...jsDocOptions,
+    files
+  })
   return markdownContent.replace(listRegExp, START_COMMENT_FENCE + '\n' + '## API\n\n' + docs + '\n' + END_COMMENT_FENCE)
 }
 
@@ -77,8 +93,6 @@ const injectFileFencePosts = async (markdownContent, baseDir, options = { log: f
     return new RegExp(`${START_LOAD_FILE_FENCE(file)}[\\s\\S]+${END_LOAD_FILE_FENCE(file)}`)
   }
   const pathBuilder = (file) => path.join(baseDir, file)
-  // const readMeContent = await readContents( markdownContent )
-  // const files = [...readMeContent.matchAll( loadFileRegExp ) ].reduce( ( acc, [,file ] ) => { acc.push( file ); return acc }, [] ).map( logFileName(options) );
   const files = [...markdownContent.matchAll(loadFileRegExp)]
     .reduce((acc, [, file]) => {
       acc.push(file)
@@ -174,7 +188,10 @@ const injectCodeFencePosts = async (markdownContent, baseDir, options = { log: f
     return { lang, file, content }
   }))
 
-  const printContent = ({ lang, content }) => content !== '' ? `\n\`\`\`${lang || ''}\n${content}\n\`\`\`\n` : '\n'
+  const printContent = ({
+    lang,
+    content
+  }) => content !== '' ? `\n\`\`\`${lang || ''}\n${content}\n\`\`\`\n` : '\n'
 
   return contentMap.reduce(
     (acc, { lang, file, content }) =>
@@ -212,7 +229,7 @@ const compose = (...fns) => args => fns.reduce((p, f) => p.then(f), Promise.reso
 
 /**
  * Generate a Markdown File, processing all the fences.
- *
+ * @tutorial basic usage
  * @param {String} markdownFile - The file name of the base file with the fences in it.
  * @param {String} [newMarkdownFile] - The file name of the output file
  * @param {String} baseDir - The directory path that all inserted files can be found
@@ -223,11 +240,11 @@ const compose = (...fns) => args => fns.reduce((p, f) => p.then(f), Promise.reso
 const generateMarkDownFile = async (markdownFile, newMarkdownFile, baseDir, indexes, options) => {
   const closureInjectFileFencePosts = (baseDir, options) => async (markdownContent) => injectFileFencePosts(markdownContent, baseDir, options)
   const closureInjectCodeFencePosts = (baseDir, options) => async (markdownContent) => injectCodeFencePosts(markdownContent, baseDir, options)
-  const closureInjectJsDoc = (indexes) => async (markdownContent) => injectJsDoc(markdownContent, indexes)
+  const closureInjectJsDoc = (indexes, options) => async (markdownContent) => injectJsDoc(markdownContent, indexes, options)
   const closureWriteContents = (outFile) => async (markdownContent) => writeContents(outFile, markdownContent)
   return await compose(
     readContents,
-    closureInjectJsDoc(indexes),
+    closureInjectJsDoc(indexes, options),
     closureInjectFileFencePosts(baseDir, options),
     closureInjectCodeFencePosts(baseDir, options),
     injectToc,
