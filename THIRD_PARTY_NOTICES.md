@@ -1,14 +1,14 @@
 
-# Acknowledgments
+## Acknowledgments
 
 This project directly uses the following open-source packages:
 
-## Dependencies
+### Dependencies
 
-- [documentation](https://github.com/documentationjs/documentation) - ISC License,
+- [jsdoc-to-markdown](https://github.com/jsdoc2md/jsdoc-to-markdown) - MIT License,
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - MIT License
 
-## Development Dependencies
+### Development Dependencies
 
 - [auto-changelog](https://github.com/CookPete/auto-changelog) - MIT License,
 - [codecov](https://github.com/codecov/codecov-node) - MIT License,
@@ -19,4 +19,3 @@ This project directly uses the following open-source packages:
 - [rollup](https://github.com/rollup/rollup) - MIT License,
 - [standard](https://github.com/standard/standard) - MIT License,
 - [tmp](https://github.com/raszi/node-tmp) - MIT License
-

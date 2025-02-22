@@ -6,8 +6,23 @@ module.exports = {
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
+      generatedCode: {
+        constBindings: true
+      }
+    },
+    {
+      file: pkg.module,
+      format: 'es',
+      sourcemap: true,
+      generatedCode: {
+        constBindings: true
+      }
     }
+  ],
+  external: [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {})
   ],
   plugins: []
 }

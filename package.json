@@ -3,16 +3,17 @@
   "version": "1.1.0",
   "description": "markdown-fences creates workflow activities which inject content into Markdown files with metadata tags.",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
     "ci": "npm install --verbose && jest --ci --coverage && codecov",
-    "test": "jest --config jest.config.cjs --verbose src",
+    "test": "npm run build && jest --config jest.config.cjs --verbose src",
     "test:cover": "jest --config jest.config.cjs --coverage --verbose src",
     "test:lint": "standard --env jest \"src/index.js\"",
     "test:updatesnapshot": "jest --updateSnapshot",
     "build": "rollup --config",
     "prebuild": "npm run clean",
-    "clean": "rimraf coverage dist",
-    "docs": "documentation build src/index.js -f html --github -o docs",
+    "clean": "rimraf coverage dist docs",
+    "build:docs": "jsdoc src/index.js -d ./docs/ -u ./tutorials",
     "precommit": "npm test:lint && npm test",
     "preversion": "npm test",
     "version": "auto-changelog -p && git add CHANGELOG.md && npm run build && git add -A dist",
@@ -56,7 +57,7 @@
     "tmp": "^0.2.3"
   },
   "dependencies": {
-    "documentation": "^13.2.5",
+    "jsdoc-to-markdown": "^9.1.1",
     "markdown-toc": "^1.2.0"
   }
 }
