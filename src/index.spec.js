@@ -9,12 +9,12 @@ const {
   injectCodeFencePosts,
   injectToc,
   generateMarkDownFile
-} = require('./index')
+} = require('../dist/index')
 
 const cp = (src, dest) => require('fs').copyFileSync(src, dest)
 const rm = (src) => require('fs').unlinkSync(src)
 
-describe('@pseger/markdown-fences', () => {
+describe('@psenger/markdown-fences', () => {
   describe('#readContents', () => {
     it('should fail when the required parameter is undefined', async () => {
       expect.assertions(1)
@@ -30,7 +30,7 @@ describe('@pseger/markdown-fences', () => {
     })
     it('should read the file sample.md from the test harness directory', async () => {
       expect.assertions(1)
-      const results = await readContents(join(__dirname, '__test_harness__', 'sample.md'))
+      const results = await readContents(join(__dirname, 'test_harness', 'sample.md'))
       return expect(results).toMatchSnapshot()
     })
   })
@@ -62,7 +62,22 @@ describe('@pseger/markdown-fences', () => {
 <!--END_SECTION:deep1/deep2/insert.md-->
 
 ## End`
-      const results = await injectJsDoc(readMe, [join(__dirname, '__test_harness__', 'foo.js')])
+      const results = await injectJsDoc(readMe, [join(__dirname, 'test_harness', 'foo.js')])
+      expect(results).toMatchSnapshot()
+    })
+    it('replace the tags when multiple patterns are supplied', async () => {
+      expect.assertions(1)
+      const readMe = `# Start
+
+<!--START_SECTION:jsdoc-->
+<!--END_SECTION:jsdoc-->
+
+## End`
+      const files = [
+        join(__dirname, 'test_harness', 'deep1', '**', 'pattern-param-*.js'),
+        join(__dirname, 'test_harness', 'ignore.js')
+      ]
+      const results = await injectJsDoc(readMe, files)
       expect(results).toMatchSnapshot()
     })
     it('replace the tags', async () => {
@@ -73,7 +88,7 @@ describe('@pseger/markdown-fences', () => {
 <!--END_SECTION:jsdoc-->
 
 ## End`
-      const results = await injectJsDoc(readMe, [join(__dirname, '__test_harness__', 'foo.js')])
+      const results = await injectJsDoc(readMe, [join(__dirname, 'test_harness', 'foo.js')])
       expect(results).toMatchSnapshot()
     })
   })
@@ -152,7 +167,7 @@ describe('@pseger/markdown-fences', () => {
 `
       const tmpobj = tmp.dirSync()
       const tempDirectoryAndFileLocation = join(tmpobj.name, 'sample.md')
-      cp(join(__dirname, '__test_harness__', 'sample.md'), tempDirectoryAndFileLocation)
+      cp(join(__dirname, 'test_harness', 'sample.md'), tempDirectoryAndFileLocation)
       const results = await injectFileFencePosts(buildDynamicReadMe('sample.md'), tmpobj.name, { log: false })
       expect(results).toMatchSnapshot()
       rm(tempDirectoryAndFileLocation)
@@ -183,7 +198,7 @@ describe('@pseger/markdown-fences', () => {
 `
       const tmpobj = tmp.dirSync()
       const tempDirectoryAndFileLocation = join(tmpobj.name, 'foo.js')
-      cp(join(__dirname, '__test_harness__', 'foo.js'), tempDirectoryAndFileLocation)
+      cp(join(__dirname, 'test_harness', 'foo.js'), tempDirectoryAndFileLocation)
       const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: false })
       expect(results).toMatchSnapshot()
       rm(tempDirectoryAndFileLocation)
@@ -212,7 +227,7 @@ describe('@pseger/markdown-fences', () => {
 `
       const tmpobj = tmp.dirSync()
       const tempDirectoryAndFileLocation = join(tmpobj.name, 'foo.js')
-      cp(join(__dirname, '__test_harness__', 'foo.js'), tempDirectoryAndFileLocation)
+      cp(join(__dirname, 'test_harness', 'foo.js'), tempDirectoryAndFileLocation)
       const results = await injectCodeFencePosts(buildDynamicReadMe('/foo.js'), tmpobj.name, { log: false })
       expect(results).toMatchSnapshot()
       rm(tempDirectoryAndFileLocation)
@@ -236,10 +251,10 @@ describe('@pseger/markdown-fences', () => {
     it('full integration test', async () => {
       const tmpobj = tmp.dirSync()
       await generateMarkDownFile(
-        join(__dirname, '__test_harness__', 'generateMarkDownFile', '.README.md'),
+        join(__dirname, 'test_harness', 'generateMarkDownFile', '.README.md'),
         join(tmpobj.name, 'README.md'),
-        join(__dirname, '__test_harness__', 'generateMarkDownFile'),
-        [join(__dirname, '__test_harness__', 'foo.js')]
+        join(__dirname, 'test_harness', 'generateMarkDownFile'),
+        [join(__dirname, 'test_harness', 'foo.js')]
       )
       const results = await readContents(join(tmpobj.name, 'README.md'))
       expect(results).toMatchSnapshot()
