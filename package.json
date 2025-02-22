@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "markdown-fences creates workflow activities which inject content into Markdown files with metadata tags.",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "scripts": {
     "ci": "npm install --verbose && jest --ci --coverage && codecov",
     "test": "npm run build && jest --config jest.config.cjs --verbose src",

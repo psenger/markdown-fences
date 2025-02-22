@@ -1,8 +1,8 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
+import toc from 'markdown-toc'
+import jsdoc2md from 'jsdoc-to-markdown'
 const fsp = fs.promises
-const toc = require('markdown-toc')
-const jsdoc2md = require('jsdoc-to-markdown')
 
 /**
  * @module @psenger/markdown-fences

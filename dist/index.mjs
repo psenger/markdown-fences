@@ -1,9 +1,7 @@
-'use strict';
-
-const path = require('path');
-const fs = require('fs');
-const toc = require('markdown-toc');
-const jsdoc2md = require('jsdoc-to-markdown');
+import path from 'path';
+import fs from 'fs';
+import toc from 'markdown-toc';
+import jsdoc2md from 'jsdoc-to-markdown';
 
 const fsp = fs.promises;
 
@@ -263,4 +261,4 @@ module.exports = {
   injectToc,
   generateMarkDownFile
 };
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.mjs.map
