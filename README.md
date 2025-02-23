@@ -18,28 +18,26 @@ Features include:
 
 ## Table of Contents
 <!-- Start Generated markdown-toc -->
-- [markdown-fences](#markdown-fences)
-  * [Table of Contents](#table-of-contents)
-  * [Installation Instructions](#installation-instructions)
-  * [API](#api)
-    + [@psenger/markdown-fences](#psengermarkdown-fences)
-      - [@psenger/markdown-fences~readContents(file) ⇒ Promise.&lt;string&gt;](#psengermarkdown-fencesreadcontentsfile-%E2%87%92-promiseltstringgt)
-      - [@psenger/markdown-fences~writeContents(file, content, [options]) ⇒ Promise.&lt;void&gt;](#psengermarkdown-fenceswritecontentsfile-content-options-%E2%87%92-promiseltvoidgt)
-      - [@psenger/markdown-fences~injectJsDoc(markdownContent, files, [jsDocOptions]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectjsdocmarkdowncontent-files-jsdocoptions-%E2%87%92-promiseltstringgt)
-      - [@psenger/markdown-fences~injectFileFencePosts(markdownContent, baseDir, [options]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectfilefencepostsmarkdowncontent-basedir-options-%E2%87%92-promiseltstringgt)
-      - [@psenger/markdown-fences~injectCodeFencePosts(markdownContent, baseDir, [options]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectcodefencepostsmarkdowncontent-basedir-options-%E2%87%92-promiseltstringgt)
-      - [@psenger/markdown-fences~injectToc(markdownContent) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjecttocmarkdowncontent-%E2%87%92-promiseltstringgt)
-      - [@psenger/markdown-fences~generateMarkDownFile(markdownFile, [newMarkdownFile], baseDir, indexes, [options]) ⇒ Promise.&lt;void&gt;](#psengermarkdown-fencesgeneratemarkdownfilemarkdownfile-newmarkdownfile-basedir-indexes-options-%E2%87%92-promiseltvoidgt)
-  * [JavaScript Documentation - Overrides](#javascript-documentation---overrides)
-  * [JavaScript Documentation - JSDoc documentation is missing](#javascript-documentation---jsdoc-documentation-is-missing)
-  * [Contributing](#contributing)
-    + [Rules](#rules)
-  * [Deployment Steps](#deployment-steps)
-  * [License](#license)
-  * [This product uses the following Open Source libraries and is subject to their License](#this-product-uses-the-following-open-source-libraries-and-is-subject-to-their-license)
-  * [Acknowledgments](#acknowledgments)
-    + [Dependencies](#dependencies)
-    + [Development Dependencies](#development-dependencies)
+- [Table of Contents](#table-of-contents)
+- [Installation Instructions](#installation-instructions)
+- [API](#api)
+  * [@psenger/markdown-fences](#psengermarkdown-fences)
+    + [@psenger/markdown-fences~readContents(file) ⇒ Promise.&lt;string&gt;](#psengermarkdown-fencesreadcontentsfile-%E2%87%92-promiseltstringgt)
+    + [@psenger/markdown-fences~writeContents(file, content, [options]) ⇒ Promise.&lt;void&gt;](#psengermarkdown-fenceswritecontentsfile-content-options-%E2%87%92-promiseltvoidgt)
+    + [@psenger/markdown-fences~injectJsDoc(markdownContent, files, [jsDocOptions]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectjsdocmarkdowncontent-files-jsdocoptions-%E2%87%92-promiseltstringgt)
+    + [@psenger/markdown-fences~injectFileFencePosts(markdownContent, baseDir, [options]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectfilefencepostsmarkdowncontent-basedir-options-%E2%87%92-promiseltstringgt)
+    + [@psenger/markdown-fences~injectCodeFencePosts(markdownContent, baseDir, [options]) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjectcodefencepostsmarkdowncontent-basedir-options-%E2%87%92-promiseltstringgt)
+    + [@psenger/markdown-fences~injectToc(markdownContent) ⇒ Promise.&lt;String&gt;](#psengermarkdown-fencesinjecttocmarkdowncontent-%E2%87%92-promiseltstringgt)
+    + [@psenger/markdown-fences~generateMarkDownFile(markdownFile, [newMarkdownFile], baseDir, indexes, [options]) ⇒ Promise.&lt;void&gt;](#psengermarkdown-fencesgeneratemarkdownfilemarkdownfile-newmarkdownfile-basedir-indexes-options-%E2%87%92-promiseltvoidgt)
+- [JavaScript Documentation - Overrides](#javascript-documentation---overrides)
+- [JavaScript Documentation - JSDoc documentation is missing](#javascript-documentation---jsdoc-documentation-is-missing)
+- [Contributing](#contributing)
+  * [Rules](#rules)
+- [Deployment Steps](#deployment-steps)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+  * [Dependencies](#dependencies)
+  * [Development Dependencies](#development-dependencies)`
 <!-- End Generated markdown-toc -->
 
 ## Installation Instructions
@@ -304,12 +302,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-This product uses the following Open Source libraries and is subject to their License
-------
-
-* [documentation.js - ICS](https://github.com/documentationjs/documentation/blob/master/LICENSE)
-* [markdown-toc - MIT](https://github.com/jonschlinkert/markdown-toc/blob/master/LICENSE)
 
 ## Acknowledgments
 

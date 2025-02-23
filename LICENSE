@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-This product uses the following Open Source libraries and is subject to their License
-------
-
-* [documentation.js - ICS](https://github.com/documentationjs/documentation/blob/master/LICENSE)
-* [markdown-toc - MIT](https://github.com/jonschlinkert/markdown-toc/blob/master/LICENSE)
